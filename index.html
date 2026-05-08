@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>Parque en Realidad Aumentada</title>
+  <title>Demo AR - Astronauta y Parque</title>
 
   <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 
@@ -19,34 +19,64 @@
     header {
       background: #14532d;
       color: white;
-      padding: 20px;
+      padding: 22px;
     }
 
     h1 {
       margin: 0;
-      font-size: 28px;
+      font-size: 30px;
     }
 
     p {
       font-size: 16px;
     }
 
-    model-viewer {
-      width: 100%;
-      height: 520px;
-      background: white;
+    .contenedor {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      padding: 20px;
     }
 
-    .info {
-      padding: 20px;
+    .card {
+      background: white;
+      border-radius: 14px;
+      padding: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    }
+
+    model-viewer {
+      width: 100%;
+      height: 500px;
+      background: #ffffff;
+      border-radius: 10px;
+    }
+
+    .estado {
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 8px;
+      font-weight: bold;
+      background: #fef3c7;
+      color: #92400e;
     }
 
     .nota {
       background: #dcfce7;
       border: 1px solid #86efac;
+      margin: 20px;
       padding: 15px;
-      margin: 15px;
       border-radius: 10px;
+    }
+
+    @media (max-width: 800px) {
+      .contenedor {
+        grid-template-columns: 1fr;
+      }
+
+      model-viewer {
+        height: 420px;
+      }
     }
   </style>
 </head>
@@ -54,28 +84,99 @@
 <body>
 
   <header>
-    <h1>Parque en Realidad Aumentada</h1>
-    <p>Ejemplo WebAR gratuito usando un modelo 3D</p>
+    <h1>Demo de Realidad Aumentada</h1>
+    <p>Astronauta de prueba + modelo del parque</p>
   </header>
-<model-viewer
-  src="https://modelviewer.dev/shared-assets/models/Astronaut.glb"
-  alt="Modelo 3D de prueba"
-  camera-controls
-  auto-rotate
-  ar
-  ar-modes="webxr scene-viewer quick-look"
-  shadow-intensity="1"
-  exposure="1">
-</model-viewer>
 
-  <div class="info">
-    <h2>¿Cómo funciona?</h2>
+  <div class="contenedor">
 
-    <div class="nota">
-      <p>Desde el celular, abre esta página y toca el botón de realidad aumentada.</p>
-      <p>Luego apunta la cámara hacia una mesa, piso o superficie plana para visualizar el parque.</p>
+    <!-- ASTRONAUTA -->
+    <div class="card">
+      <h2>Astronauta</h2>
+
+      <model-viewer
+        id="astronauta"
+        src="https://modelviewer.dev/shared-assets/models/Astronaut.glb"
+        alt="Modelo 3D de astronauta"
+        camera-controls
+        auto-rotate
+        ar
+        ar-modes="webxr scene-viewer quick-look"
+        shadow-intensity="1"
+        exposure="1">
+      </model-viewer>
+
+      <div id="estadoAstronauta" class="estado">
+        Cargando astronauta...
+      </div>
     </div>
+
+    <!-- PARQUE -->
+    <div class="card">
+      <h2>Parque</h2>
+
+      <model-viewer
+        id="parque"
+        src="./parque_escala_ar.glb"
+        alt="Modelo 3D de parque"
+        camera-controls
+        auto-rotate
+        ar
+        ar-modes="webxr scene-viewer quick-look"
+        shadow-intensity="1"
+        exposure="1"
+        camera-orbit="45deg 65deg 8m"
+        camera-target="0m 0m 0m">
+      </model-viewer>
+
+      <div id="estadoParque" class="estado">
+        Cargando parque...
+      </div>
+    </div>
+
   </div>
+
+  <div class="nota">
+    <p>
+      Si el astronauta aparece y el parque no, el problema está en el archivo del parque:
+      nombre, ubicación, peso, escala o daño del modelo.
+    </p>
+    <p>
+      Para probar AR desde celular, abre esta página publicada en internet y toca el botón de realidad aumentada.
+    </p>
+  </div>
+
+  <script>
+    const astronauta = document.getElementById("astronauta");
+    const parque = document.getElementById("parque");
+
+    const estadoAstronauta = document.getElementById("estadoAstronauta");
+    const estadoParque = document.getElementById("estadoParque");
+
+    astronauta.addEventListener("load", () => {
+      estadoAstronauta.textContent = "Astronauta cargado correctamente.";
+      estadoAstronauta.style.background = "#dcfce7";
+      estadoAstronauta.style.color = "#166534";
+    });
+
+    astronauta.addEventListener("error", () => {
+      estadoAstronauta.textContent = "Error al cargar el astronauta.";
+      estadoAstronauta.style.background = "#fee2e2";
+      estadoAstronauta.style.color = "#991b1b";
+    });
+
+    parque.addEventListener("load", () => {
+      estadoParque.textContent = "Parque cargado correctamente.";
+      estadoParque.style.background = "#dcfce7";
+      estadoParque.style.color = "#166534";
+    });
+
+    parque.addEventListener("error", () => {
+      estadoParque.textContent = "Error al cargar el parque. Revisa que el archivo se llame exactamente parque_escala_ar.glb y esté junto al index.html.";
+      estadoParque.style.background = "#fee2e2";
+      estadoParque.style.color = "#991b1b";
+    });
+  </script>
 
 </body>
 </html>
