@@ -4,8 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>Demo AR - Astronauta y Parque</title>
+  <title>Demo AR - Astronauta y Parque Online</title>
 
+  <!-- Librería model-viewer -->
   <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 
   <style>
@@ -69,6 +70,18 @@
       border-radius: 10px;
     }
 
+    .boton-ar {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 10px 18px;
+      border-radius: 8px;
+      background: #14532d;
+      color: white;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+    }
+
     @media (max-width: 800px) {
       .contenedor {
         grid-template-columns: 1fr;
@@ -85,7 +98,7 @@
 
   <header>
     <h1>Demo de Realidad Aumentada</h1>
-    <p>Astronauta de prueba + modelo del parque</p>
+    <p>Astronauta de prueba + parque online en el mismo modo AR</p>
   </header>
 
   <div class="contenedor">
@@ -111,14 +124,14 @@
       </div>
     </div>
 
-    <!-- PARQUE -->
+    <!-- PARQUE ONLINE -->
     <div class="card">
-      <h2>Parque</h2>
+      <h2>Parque Online</h2>
 
       <model-viewer
         id="parque"
-        src="./parque_escala_ar.glb"
-        alt="Modelo 3D de parque"
+        src="https://raw.githubusercontent.com/andrewwoan/bellas-park/main/Portfolio.glb"
+        alt="Modelo 3D de parque online"
         camera-controls
         auto-rotate
         ar
@@ -127,10 +140,15 @@
         exposure="1"
         camera-orbit="45deg 65deg 8m"
         camera-target="0m 0m 0m">
+        
+        <button slot="ar-button" class="boton-ar">
+          Ver parque en AR
+        </button>
+
       </model-viewer>
 
       <div id="estadoParque" class="estado">
-        Cargando parque...
+        Cargando parque online...
       </div>
     </div>
 
@@ -138,11 +156,12 @@
 
   <div class="nota">
     <p>
-      Si el astronauta aparece y el parque no, el problema está en el archivo del parque:
-      nombre, ubicación, peso, escala o daño del modelo.
+      Este código ya no usa un archivo local como parque_escala_ar.glb. 
+      El parque se carga desde internet mediante una URL directa .glb.
     </p>
     <p>
-      Para probar AR desde celular, abre esta página publicada en internet y toca el botón de realidad aumentada.
+      Para probar realidad aumentada en celular, publica esta página en internet. 
+      En local puede funcionar el visor 3D, pero AR suele necesitar HTTPS.
     </p>
   </div>
 
@@ -166,13 +185,13 @@
     });
 
     parque.addEventListener("load", () => {
-      estadoParque.textContent = "Parque cargado correctamente.";
+      estadoParque.textContent = "Parque online cargado correctamente.";
       estadoParque.style.background = "#dcfce7";
       estadoParque.style.color = "#166534";
     });
 
     parque.addEventListener("error", () => {
-      estadoParque.textContent = "Error al cargar el parque. Revisa que el archivo se llame exactamente parque_escala_ar.glb y esté junto al index.html.";
+      estadoParque.textContent = "Error al cargar el parque online. Puede ser problema de conexión, CORS o enlace bloqueado.";
       estadoParque.style.background = "#fee2e2";
       estadoParque.style.color = "#991b1b";
     });
